@@ -16,10 +16,11 @@
 package com.example.arrayjumper.FragmentBasics;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
-public class MainActivity extends FragmentActivity 
+public class MainActivity extends AppCompatActivity
         implements HeadlinesFragment.OnHeadlineSelectedListener {
 
     /** Called when the activity is first created. */
@@ -59,9 +60,10 @@ public class MainActivity extends FragmentActivity
         ArticleFragment articleFrag = (ArticleFragment)
                 getSupportFragmentManager().findFragmentById(R.id.article_fragment);
 
-        if (articleFrag != null) {
-            // If article frag is available, we're in two-pane layout...
 
+        if (articleFrag != null) {
+
+            // If article frag is available, we're in two-pane layout...
             // Call a method in the ArticleFragment to update its content
             articleFrag.updateArticleView(position);
 

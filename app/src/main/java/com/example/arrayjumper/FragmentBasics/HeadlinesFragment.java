@@ -16,17 +16,19 @@
 
 package com.example.arrayjumper.FragmentBasics;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class HeadlinesFragment extends ListFragment {
     OnHeadlineSelectedListener mCallback;
+    TextView lastView;
 
     // The container Activity must implement this interface so the frag can deliver messages
     public interface OnHeadlineSelectedListener {
@@ -42,6 +44,7 @@ public class HeadlinesFragment extends ListFragment {
         int layout = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
                 android.R.layout.simple_list_item_activated_1 : android.R.layout.simple_list_item_1;
 
+        lastView = null;
         // Create an array adapter for the list view, using the Ipsum headlines array
         setListAdapter(new ArrayAdapter<String>(getActivity(), layout, Ipsum.Headlines));
     }
@@ -78,5 +81,23 @@ public class HeadlinesFragment extends ListFragment {
         
         // Set the item as checked to be highlighted when in two-pane layout
         getListView().setItemChecked(position, true);
+        if(lastView!=null) {
+            lastView.setTextColor(ContextCompat.getColor(getContext(),R.color.black));
+        }
+        TextView selectedView = (TextView) getViewByPosition(position, l);
+        lastView = selectedView;
+        selectedView.setTextColor(ContextCompat.getColor(getContext(),R.color.white));
+    }
+
+    public View getViewByPosition(int pos, ListView listView) {
+        final int firstListItemPosition = listView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
+
+        if (pos < firstListItemPosition || pos > lastListItemPosition ) {
+            return listView.getAdapter().getView(pos, null, listView);
+        } else {
+            final int childIndex = pos - firstListItemPosition;
+            return listView.getChildAt(childIndex);
+        }
     }
 }
